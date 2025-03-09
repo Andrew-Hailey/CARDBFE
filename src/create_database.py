@@ -34,7 +34,7 @@ def create_tables():
     database.close
 
 def populate_data():
-    # Create/Connect to DB
+    # Connect to DB
     database = sqlite3.connect('Fleet_DB')
     # Create a cursor to interact with the DB
     cursor = database.cursor()
