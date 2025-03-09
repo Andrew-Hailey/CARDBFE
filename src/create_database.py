@@ -52,13 +52,15 @@ def populate_data():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+    print()
 
     print()
     cursor.execute("SELECT * FROM maintenance_records")
     rows = cursor.fetchall()
     for row in rows:
         print(row)
-    
+    print()
+   
     # Close the DB connection
     database.close
 
