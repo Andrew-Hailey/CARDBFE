@@ -29,15 +29,20 @@ def get_vehicle_data():
     return v_data
     
 def on_row_selected(event):
+    view_details_button.configure(state="normal")
+    
+
+def print_to_log(param):
+    print(param)
+
+def open_details_window():
+    # Pull data from v_tree
     selected_item = v_tree.focus()
     values = v_tree.item(selected_item, "values")
-    open_details_window(values)
-
-
-def open_details_window(values):
+    # Create new details window
     sub_details = tk.Toplevel(mainapp)
     sub_details.title("Vehicle Details")
-    
+    # Create widgets for window
     id_label = tk.Label(sub_details, text= "ID:").grid(row=0,column=0)
     id_entry = tk.Entry(sub_details, textvariable= "s_id").grid(row=0,column=1)
     type_label = tk.Label(sub_details, text= "Type:").grid(row=1,column=0)
@@ -52,10 +57,10 @@ def open_details_window(values):
     age_entry = tk.Entry(sub_details, textvariable= "s_age").grid(row=5,column=1)
     fuel_type_label = tk.Label(sub_details, text= "Fuel Type:").grid(row=6,column=0)
     fuel_type_entry = tk.Entry(sub_details, textvariable= "s_fuel_type").grid(row=6,column=1)
-    
-    close_button = tk.Button(sub_details, command=sub_details.destroy).grid(row=7,column=2)
-    save_button = tk.Button(sub_details, command=print("saved")).grid(row=7,column=3)
-    maintenace_button = tk.Button(sub_details, command=print("maintenance")).grid(row=7,column=1)
+    # Create buttons
+    close_button = tk.Button(sub_details, text="Close", command=sub_details.destroy).grid(row=7,column=1)
+    save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved")).grid(row=7,column=2)
+    maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance")).grid(row=7,column=0)
     
 # Create main window
 mainapp = tk.Tk()
@@ -81,10 +86,9 @@ v_tree.pack()
 
 v_tree.bind("<<TreeviewSelect>>", on_row_selected)
 
-# Add button to view vehicles
-
-button1 = tk.Button(mainapp, text="View Vehicles", command=view_vehicles)
-button1.pack()
+# Add button to view vehicle details
+view_details_button = tk.Button(mainapp, text="View Vehicle Details...", command=open_details_window, state="disabled")
+view_details_button.pack()
 
 # Run the app
 
