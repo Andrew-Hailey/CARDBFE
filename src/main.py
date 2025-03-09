@@ -5,12 +5,15 @@ import tkinter as tk
 from tkinter import messagebox 
 from tkinter import ttk 
 
+open_windows = {}
 
 # Create and populate data
 create_tables()
 populate_data()
-# check data
+
+
 def view_vehicles():
+    # check data
     database = sqlite3.connect("Fleet_DB")
     cursor = database.cursor()
     cursor.execute("SELECT * FROM vehicles")
@@ -18,14 +21,15 @@ def view_vehicles():
     for vehicle in vehicles:
         print(vehicle)
     print()
-    database.close
+    database.close()
     
-# Retrieve data from vehicles table
 def get_vehicle_data():
+    # Retrieve data from vehicles table
     database = sqlite3.connect("Fleet_DB")
     cursor = database.cursor()
     cursor.execute("SELECT * FROM vehicles")
     v_data = cursor.fetchall()
+    database.close()
     return v_data
     
 def on_row_selected(event):
@@ -39,10 +43,19 @@ def open_details_window():
     # Pull data from v_tree
     selected_item = v_tree.focus()
     values = v_tree.item(selected_item, "values")
+    vehicle_id = values[0]
+    
+    # Check if a window is already open for vehicle ID
+    if vehicle_id in open_windows:
+        open_windows[vehicle_id].lift()
+        return
     
     # Create new details window
     sub_details = tk.Toplevel(mainapp)
     sub_details.title("Vehicle Details")
+    
+    # Add window to dictionary
+    open_windows[vehicle_id] = sub_details
     
     # Create widgets for window
     id_label = tk.Label(sub_details, text= "ID:")
@@ -89,10 +102,16 @@ def open_details_window():
     fuel_type_entry.insert(0,values[6])
     
     # Create buttons
-    close_button = tk.Button(sub_details, text="Close", command=sub_details.destroy).grid(row=7,column=1)
+    close_button = tk.Button(sub_details, text="Close", command=lambda: close_window(vehicle_id)).grid(row=7,column=1)
     save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved")).grid(row=7,column=2)
     maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance")).grid(row=7,column=0)
-    
+
+def close_window(vehicle_id):
+    #close the current window and remove it from the open_windows dictionary
+    if vehicle_id in open_windows:
+        open_windows[vehicle_id].destroy()
+        del open_windows[vehicle_id]
+        
 # Create main window
 mainapp = tk.Tk()
 mainapp.title('Fleet Management')
