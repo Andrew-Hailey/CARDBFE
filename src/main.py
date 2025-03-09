@@ -9,7 +9,7 @@ create_tables()
 populate_data()
 
 def view_vehicles():
-    database = sqlite3.connect("fleet_DB.db")
+    database = sqlite3.connect("Fleet_DB")
     cursor = database.cursor()
     cursor.execute("SELECT * FROM vehicles")
     vehicles = cursor.fetchall()
