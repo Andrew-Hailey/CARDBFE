@@ -57,54 +57,59 @@ def open_details_window():
     # Add window to dictionary
     open_windows[vehicle_id] = sub_details
     
+    # Define variables for widgets
+    s_id = tk.StringVar(value=values[0])
+    s_type = tk.StringVar(value=values[1])
+    s_last_service = tk.StringVar(value=values[2])
+    s_next_service = tk.StringVar(value=values[3])
+    s_tax_status = tk.StringVar(value=values[4])
+    s_age = tk.StringVar(value=values[5])
+    s_fuel_type = tk.StringVar(value=values[6])
+    
     # Create widgets for window
     id_label = tk.Label(sub_details, text= "ID:")
     id_label.grid(row=0,column=0)
-    id_entry = tk.Entry(sub_details, textvariable= "s_id")
+    id_entry = tk.Entry(sub_details, textvariable= s_id)
     id_entry.grid(row=0,column=1)
-    id_entry.insert(0,values[0])
     id_entry.configure(state="readonly")
     
     type_label = tk.Label(sub_details, text= "Type:")
     type_label.grid(row=1,column=0)
-    type_entry = tk.Entry(sub_details, textvariable= "s_type")
+    type_entry = tk.Entry(sub_details, textvariable= s_type)
     type_entry.grid(row=1,column=1)
-    type_entry.insert(0,values[1])
     
     last_service_label = tk.Label(sub_details, text= "Last Service:")
     last_service_label.grid(row=2,column=0)
-    last_service_entry = tk.Entry(sub_details, textvariable= "s_last_service")
+    last_service_entry = tk.Entry(sub_details, textvariable= s_last_service)
     last_service_entry.grid(row=2,column=1)    
-    last_service_entry.insert(0,values[2])
     
     next_service_label = tk.Label(sub_details, text= "Next Service:")
     next_service_label.grid(row=3,column=0)
-    next_service_entry = tk.Entry(sub_details, textvariable= "s_next_service")
+    next_service_entry = tk.Entry(sub_details, textvariable= s_next_service)
     next_service_entry.grid(row=3,column=1)
-    next_service_entry.insert(0,values[3])
     
     tax_status_label = tk.Label(sub_details, text= "Tax Status:")
     tax_status_label.grid(row=4,column=0)
-    tax_status_entry = tk.Entry(sub_details, textvariable= "s_tax_status")
+    tax_status_entry = tk.Entry(sub_details, textvariable= s_tax_status)
     tax_status_entry.grid(row=4,column=1)
-    tax_status_entry.insert(0,values[4])
     
     age_label = tk.Label(sub_details, text= "Vehicle Age:")
     age_label.grid(row=5,column=0)
-    age_entry = tk.Entry(sub_details, textvariable= "s_age")
+    age_entry = tk.Entry(sub_details, textvariable= s_age)
     age_entry.grid(row=5,column=1)
-    age_entry.insert(0,values[5])
     
     fuel_type_label = tk.Label(sub_details, text= "Fuel Type:")
     fuel_type_label.grid(row=6,column=0)
-    fuel_type_entry = tk.Entry(sub_details, textvariable= "s_fuel_type")
+    fuel_type_entry = tk.Entry(sub_details, textvariable= s_fuel_type)
     fuel_type_entry.grid(row=6,column=1)
-    fuel_type_entry.insert(0,values[6])
     
     # Create buttons
-    close_button = tk.Button(sub_details, text="Close", command=lambda: close_window(vehicle_id)).grid(row=7,column=1)
-    save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved")).grid(row=7,column=2)
-    maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance")).grid(row=7,column=0)
+    close_button = tk.Button(sub_details, text="Close", command=lambda: close_window(vehicle_id))
+    close_button.grid(row=7,column=1)
+    save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved"))
+    save_button.grid(row=7,column=2)
+    maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance"))
+    maintenace_button.grid(row=7,column=0)
 
 def close_window(vehicle_id):
     #close the current window and remove it from the open_windows dictionary
