@@ -39,24 +39,55 @@ def open_details_window():
     # Pull data from v_tree
     selected_item = v_tree.focus()
     values = v_tree.item(selected_item, "values")
+    
     # Create new details window
     sub_details = tk.Toplevel(mainapp)
     sub_details.title("Vehicle Details")
+    
     # Create widgets for window
-    id_label = tk.Label(sub_details, text= "ID:").grid(row=0,column=0)
-    id_entry = tk.Entry(sub_details, textvariable= "s_id").grid(row=0,column=1)
-    type_label = tk.Label(sub_details, text= "Type:").grid(row=1,column=0)
-    type_entry = tk.Entry(sub_details, textvariable= "s_type").grid(row=1,column=1)
-    last_service_label = tk.Label(sub_details, text= "Last Service:").grid(row=2,column=0)
-    last_service_entry = tk.Entry(sub_details, textvariable= "s_last_service").grid(row=2,column=1)    
-    next_service_label = tk.Label(sub_details, text= "Next Service:").grid(row=3,column=0)
-    next_service_entry = tk.Entry(sub_details, textvariable= "s_next_service").grid(row=3,column=1)
-    tax_status_label = tk.Label(sub_details, text= "Tax Status:").grid(row=4,column=0)
-    tax_status_entry = tk.Entry(sub_details, textvariable= "s_tax_status").grid(row=4,column=1)
-    age_label = tk.Label(sub_details, text= "Vehicle Age:").grid(row=5,column=0)
-    age_entry = tk.Entry(sub_details, textvariable= "s_age").grid(row=5,column=1)
-    fuel_type_label = tk.Label(sub_details, text= "Fuel Type:").grid(row=6,column=0)
-    fuel_type_entry = tk.Entry(sub_details, textvariable= "s_fuel_type").grid(row=6,column=1)
+    id_label = tk.Label(sub_details, text= "ID:")
+    id_label.grid(row=0,column=0)
+    id_entry = tk.Entry(sub_details, textvariable= "s_id")
+    id_entry.grid(row=0,column=1)
+    id_entry.insert(0,values[0])
+    id_entry.configure(state="readonly")
+    
+    type_label = tk.Label(sub_details, text= "Type:")
+    type_label.grid(row=1,column=0)
+    type_entry = tk.Entry(sub_details, textvariable= "s_type")
+    type_entry.grid(row=1,column=1)
+    type_entry.insert(0,values[1])
+    
+    last_service_label = tk.Label(sub_details, text= "Last Service:")
+    last_service_label.grid(row=2,column=0)
+    last_service_entry = tk.Entry(sub_details, textvariable= "s_last_service")
+    last_service_entry.grid(row=2,column=1)    
+    last_service_entry.insert(0,values[2])
+    
+    next_service_label = tk.Label(sub_details, text= "Next Service:")
+    next_service_label.grid(row=3,column=0)
+    next_service_entry = tk.Entry(sub_details, textvariable= "s_next_service")
+    next_service_entry.grid(row=3,column=1)
+    next_service_entry.insert(0,values[3])
+    
+    tax_status_label = tk.Label(sub_details, text= "Tax Status:")
+    tax_status_label.grid(row=4,column=0)
+    tax_status_entry = tk.Entry(sub_details, textvariable= "s_tax_status")
+    tax_status_entry.grid(row=4,column=1)
+    tax_status_entry.insert(0,values[4])
+    
+    age_label = tk.Label(sub_details, text= "Vehicle Age:")
+    age_label.grid(row=5,column=0)
+    age_entry = tk.Entry(sub_details, textvariable= "s_age")
+    age_entry.grid(row=5,column=1)
+    age_entry.insert(0,values[5])
+    
+    fuel_type_label = tk.Label(sub_details, text= "Fuel Type:")
+    fuel_type_label.grid(row=6,column=0)
+    fuel_type_entry = tk.Entry(sub_details, textvariable= "s_fuel_type")
+    fuel_type_entry.grid(row=6,column=1)
+    fuel_type_entry.insert(0,values[6])
+    
     # Create buttons
     close_button = tk.Button(sub_details, text="Close", command=sub_details.destroy).grid(row=7,column=1)
     save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved")).grid(row=7,column=2)
