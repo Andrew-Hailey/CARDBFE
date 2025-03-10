@@ -11,7 +11,6 @@ open_windows = {}
 create_tables()
 populate_data()
 
-
 def view_vehicles():
     # check data
     database = sqlite3.connect("Fleet_DB")
@@ -35,7 +34,6 @@ def get_vehicle_data():
 def on_row_selected(event):
     view_details_button.configure(state="normal")
     
-
 def print_to_log(param):
     print(param)
 
@@ -56,12 +54,6 @@ def open_details_window():
     
     # Add window to dictionary
     open_windows[vehicle_id] = sub_details
-    
-    # Handle if the user uses the 'X' button
-    def on_close():
-        sub_details.destroy
-        del open_windows[vehicle_id]
-    sub_details.protocol("WM_DELETE_WINDOW", on_close)
     
     # Define variables for widgets
     s_id = tk.StringVar(value=values[0])
@@ -114,24 +106,47 @@ def open_details_window():
     close_button.grid(row=7,column=1)
     save_button = tk.Button(sub_details, text="Save", command=lambda: print_to_log("saved"))
     save_button.grid(row=7,column=2)
-    maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance"))
+    maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: open_maintenance_details(vehicle_id))
     maintenace_button.grid(row=7,column=0)
-
-
     
+    def close_window(vehicle_id):
+        #close the current window and remove it from the open_windows dictionary
+        if vehicle_id in open_windows:
+            open_windows[vehicle_id].destroy()
+            del open_windows[vehicle_id]
+            
+    # Handle if the user uses the 'X' button
+    sub_details.protocol("WM_DELETE_WINDOW", lambda: close_window(vehicle_id))
+    
+    def open_maintenance_details(vehicle_id):
+        # Pull data from database
+        database = sqlite3.connect("Fleet_DB")
+        cursor = database.cursor()
+        cursor.execute("SELECT * FROM maintenance_records WHERE vehicle_id = ?", (vehicle_id,))
+        maintenance_records = cursor.fetchall()
+        database.close()
+        # Create a new window
+        maintenace_details = tk.Toplevel(mainapp)
+        maintenace_details.title(f"Maintenance Details - {vehicle_id}")
+        # Make a new Tree View
+        d_tree = ttk.Treeview(maintenace_details, columns=('ID','vehicle_id','maintenance_date','description_of_work','cost'), show="headings")
+        d_tree.heading('ID', text='ID')
+        d_tree.heading('vehicle_id', text='Vehicle ID')
+        d_tree.heading('maintenance_date', text='Maintenance Date')
+        d_tree.heading('description_of_work', text='Description of Work')
+        d_tree.heading('cost', text='Cost')
+        # Add data to treeview
+        for record in maintenance_records:
+            d_tree.insert("",tk.END, values=record)
+        d_tree.pack()
 
-def close_window(vehicle_id):
-    #close the current window and remove it from the open_windows dictionary
-    if vehicle_id in open_windows:
-        open_windows[vehicle_id].destroy()
-        del open_windows[vehicle_id]
-        
-#def open_maintenance_details():
     
 # Create main window
 mainapp = tk.Tk()
 mainapp.title('Fleet Management')
 mainapp.geometry("1600x800")
+mainapp.rowconfigure(0, weight=1)
+mainapp.columnconfigure(1, weight=1)
 
 # Create Treeview
 v_tree = ttk.Treeview(mainapp, columns=('ID','Vehicle Type', 'Last Service Date', 'Next Service Date', 'Tax Status', 'Vehicle Age', 'Fuel Type'), show='headings')
@@ -142,19 +157,26 @@ v_tree.heading('Next Service Date', text='Next Service Date')
 v_tree.heading('Tax Status', text='Tax Status')
 v_tree.heading('Vehicle Age', text='Vehicle Age')
 v_tree.heading('Fuel Type', text='Fuel Type')
-
+# Create scrollbars
+x_scroll = ttk.Scrollbar(mainapp, orient='horizontal', command=v_tree.xview)
+y_scroll = ttk.Scrollbar(mainapp, orient='vertical', command=v_tree.yview)
+# Configure the scrollbars with the Treeview
+v_tree.configure(xscrollcommand=x_scroll.set, yscrollcommand=y_scroll.set)
+# Pack or grid the scrollbars
+x_scroll.grid(row=1, column=1, sticky="ew")  # Horizontal scrollbar at the bottom
+y_scroll.grid(row=0, column=2, sticky="ns")  # Vertical scrollbar on the right
 # Add data to the Treeview
 vehicle_data = get_vehicle_data()
 for vehicle in vehicle_data:
     v_tree.insert("", tk.END, values=vehicle)
 
-v_tree.pack()
+v_tree.grid(row=0, column=1, sticky="nsew")
 
 v_tree.bind("<<TreeviewSelect>>", on_row_selected)
 
 # Add button to view vehicle details
 view_details_button = tk.Button(mainapp, text="View Vehicle Details...", command=open_details_window, state="disabled")
-view_details_button.pack()
+view_details_button.grid(row=0,column=0)
 
 # Run the app
 
