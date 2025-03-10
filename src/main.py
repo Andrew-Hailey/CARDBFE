@@ -57,6 +57,12 @@ def open_details_window():
     # Add window to dictionary
     open_windows[vehicle_id] = sub_details
     
+    # Handle if the user uses the 'X' button
+    def on_close():
+        sub_details.destroy
+        del open_windows[vehicle_id]
+    sub_details.protocol("WM_DELETE_WINDOW", on_close)
+    
     # Define variables for widgets
     s_id = tk.StringVar(value=values[0])
     s_type = tk.StringVar(value=values[1])
@@ -111,12 +117,17 @@ def open_details_window():
     maintenace_button = tk.Button(sub_details, text="Maintenance Details...", command=lambda: print_to_log("maintenance"))
     maintenace_button.grid(row=7,column=0)
 
+
+    
+
 def close_window(vehicle_id):
     #close the current window and remove it from the open_windows dictionary
     if vehicle_id in open_windows:
         open_windows[vehicle_id].destroy()
         del open_windows[vehicle_id]
         
+#def open_maintenance_details():
+    
 # Create main window
 mainapp = tk.Tk()
 mainapp.title('Fleet Management')
